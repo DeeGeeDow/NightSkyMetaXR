@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using TMPro;
 public class LocationManager : MonoBehaviour
 {
@@ -9,10 +10,11 @@ public class LocationManager : MonoBehaviour
     public float longitude = 107.609810f;
     [SerializeField] private TMP_InputField latitudeUI;
     [SerializeField] private TMP_InputField longitudeUI;
-
+    public UnityEvent<float, float> onLocationChanged;
     private void Start()
     {
-        ResetLatLongToDefault();
+        latitudeUI.text = $"{latitude}";
+        longitudeUI.text = $"{longitude}";
     }
 
     public void ResetLatLongToDefault()
@@ -24,12 +26,20 @@ public class LocationManager : MonoBehaviour
     public void SetLat(string latString)
     {
         latitude = float.Parse(latString);
-        latitudeUI.text = latitude.ToString();
+        latitudeUI.text = $"{latitude}";
+        onLocationChanged.Invoke(latitude, longitude);
     }
 
     public void SetLong(string longString)
     {
         longitude = float.Parse(longString);
-        longitudeUI.text = longitude.ToString();
+        longitudeUI.text = $"{longitude}";
+        onLocationChanged.Invoke(latitude, longitude);
+    }
+ 
+    [ContextMenu("Text Change Location")]
+    public void TestChangeLocation()
+    {
+        SetLong("50");
     }
 }

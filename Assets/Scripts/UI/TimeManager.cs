@@ -14,14 +14,14 @@ public class TimeManager : MonoBehaviour
 
     public void Awake()
     {
-        AppTime = DateTimeOffset.Now;
+        AppTime = DateTimeOffset.UtcNow;
         ConvertTimeByLocation(-6.914744f, 107.609810f);
         Lst = SetLst(LocationManager.longitude);
     }
 
     public void Update()
     {
-        AppTime.AddSeconds(Time.deltaTime);
+        AppTime = AppTime.AddSeconds(Time.deltaTime);
         Lst = SetLst(LocationManager.longitude);
     }
 
@@ -32,6 +32,7 @@ public class TimeManager : MonoBehaviour
         double lst = 100.46 + 0.985647 * d + lon + 15 * ((double)timeUtc.Hour + (double)timeUtc.Minute / 60 + (double)timeUtc.Second / 3600);
         while (lst < 0) lst += 360;
         lst %= 360;
+        Debug.Log(AppTime);
         return lst;
     }
     public void ConvertTimeByLocation(float lat, float lon)
@@ -39,6 +40,9 @@ public class TimeManager : MonoBehaviour
         string tzIana = TimeZoneLookup.GetTimeZone(lat, lon).Result;
         TimeZoneInfo tzInfo = TZConvert.GetTimeZoneInfo(tzIana);
         AppTime = TimeZoneInfo.ConvertTime(AppTime, tzInfo);
+        Lst = SetLst(lon);
+        Debug.Log($"tzIana : {tzIana}");
+        Debug.Log($"tzInfo : {tzInfo}");
     }
 
     public void SetYear(string yearString)

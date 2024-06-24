@@ -103,10 +103,21 @@ public class ConstellationField : MonoBehaviour
             constellationNameGO.transform.position = constellationPos * starField.starFieldScale;
             constellationNameGO.transform.LookAt(_cam.transform.position);
             constellationNameGO.transform.Rotate(Vector3.up, 180);
-            Debug.Log($"Constellation : {constellations[i]}");
+
             constellationNameText.text = constellations[i];
             constellationNameText.fontSize = 72;
         }
+    }
+
+    [ContextMenu("Redraw")]
+    public void RedrawConstellationNames()
+    {
+        int n = transform.childCount;
+        for(int i=n-1; i>=0; i--){
+            GameObject.Destroy(transform.GetChild(i).gameObject);
+        }
+        SetupConstellationNames();
+        Debug.Log("Redraw");
     }
 
     public void SetConstellationLinesVisibility(bool isVisible){

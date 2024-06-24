@@ -8205,6 +8205,33 @@ MonoBehaviour:
   longitude: 107.60981
   latitudeUI: {fileID: 1437891457}
   longitudeUI: {fileID: 1552862193}
+  onLocationChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 408634478}
+        m_TargetAssemblyTypeName: TimeManager, Assembly-CSharp
+        m_MethodName: ConvertTimeByLocation
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1886788889}
+        m_TargetAssemblyTypeName: ConstellationField, Assembly-CSharp
+        m_MethodName: RedrawConstellationNames
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &1400498533
 Transform:
   m_ObjectHideFlags: 0
@@ -9115,7 +9142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   starSizeMax: 10
-  maxMagnitudeVisible: 6
+  maxMagnitudeVisible: 7.6
   starMaterial: {fileID: 2100000, guid: 31d03ed577cc94943a0b18dc96c2b4e6, type: 2}
   LocationManager: {fileID: 1400498532}
   TimeManager: {fileID: 408634478}
@@ -20316,7 +20343,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5451155996348932764, guid: b823db3319565634c944edf98b57a675, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5451155996348932764, guid: b823db3319565634c944edf98b57a675, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -20325,7 +20352,7 @@ PrefabInstance:
     - target: {fileID: 5451155996348932764, guid: b823db3319565634c944edf98b57a675, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1400498532}
     - target: {fileID: 5451155996348932764, guid: b823db3319565634c944edf98b57a675, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -20340,7 +20367,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5451155996348932764, guid: b823db3319565634c944edf98b57a675, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: StarField, Assembly-CSharp
+      value: LocationManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5451155996348932764, guid: b823db3319565634c944edf98b57a675, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
