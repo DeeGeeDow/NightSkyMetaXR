@@ -27,6 +27,7 @@ public class ConstellationField : MonoBehaviour
     private Camera _cam;
     private Mesh _constellationLineMesh;
     public Material ConstellationMaterial;
+    private List<GameObject> _constellationNameObjects = new List<GameObject>();
 
     [Header("Location and Time Manager")]
     public LocationManager LocationManager;
@@ -44,6 +45,7 @@ public class ConstellationField : MonoBehaviour
     private void Update()
     {
         if(IsConstellationLinesVisible) DrawConstellationLines();
+        if(IsConstellationNameVisible) DrawConstellationNames();
     }
 
     public void DrawConstellationLines()
@@ -87,7 +89,6 @@ public class ConstellationField : MonoBehaviour
 
     public void SetupConstellationNames()
     {
-
         for (int i=0; i<constellationPositions.Count; i++)
         {
             float lst = (float) TimeManager.Lst;
@@ -106,6 +107,24 @@ public class ConstellationField : MonoBehaviour
 
             constellationNameText.text = constellations[i];
             constellationNameText.fontSize = 72;
+            _constellationNameObjects.Add(constellationNameGO);
+        }
+    }
+
+    public void DrawConstellationNames()
+    {
+        for(int i=0; i<_constellationNameObjects.Count; i++)
+        {
+            float lst = (float)TimeManager.Lst;
+            float ha = lst - constellationPositions[i].Item1 * 15;
+            if (ha > 180) ha -= 360;
+            else if (ha < -180) ha += 360;
+            (float, float) altAz = Util.HaDecToAltAz(ha, constellationPositions[i].Item2, LocationManager.latitude);
+            Vector3 constellationPos = Util.SphereToRec(altAz.Item2, altAz.Item1);
+
+            _constellationNameObjects[i].transform.position = constellationPos * starField.starFieldScale;
+            _constellationNameObjects[i].transform.LookAt(_cam.transform.position);
+            _constellationNameObjects[i].transform.Rotate(Vector3.up, 180);
         }
     }
 
