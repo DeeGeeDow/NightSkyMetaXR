@@ -28,6 +28,7 @@ public class ConstellationField : MonoBehaviour
     private Mesh _constellationLineMesh;
     public Material ConstellationMaterial;
     private List<GameObject> _constellationNameObjects = new List<GameObject>();
+    public Material ConstellationNameMaterial;
 
     [Header("Location and Time Manager")]
     public LocationManager LocationManager;
@@ -104,10 +105,10 @@ public class ConstellationField : MonoBehaviour
             constellationNameGO.transform.position = constellationPos * starField.starFieldScale;
             constellationNameGO.transform.LookAt(_cam.transform.position);
             constellationNameGO.transform.Rotate(Vector3.up, 180);
-
             constellationNameText.text = constellations[i];
             constellationNameText.fontSize = 72;
             _constellationNameObjects.Add(constellationNameGO);
+            
         }
     }
 

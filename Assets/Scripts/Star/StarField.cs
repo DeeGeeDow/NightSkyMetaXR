@@ -195,21 +195,21 @@ public class StarField : MonoBehaviour
         switch(BortleScale)
         {
             case 1: 
-                maxMagnitudeVisible = 7.6f; break;
+                maxMagnitudeVisible = 8f; break;
             case 2:
-                maxMagnitudeVisible = 7.1f; break;
+                maxMagnitudeVisible = 7.5f; break;
             case 3:
-                maxMagnitudeVisible = 6.6f; break;
+                maxMagnitudeVisible = 7.0f; break;
             case 4:
-                maxMagnitudeVisible = 6.3f; break;
+                maxMagnitudeVisible = 6.5f; break;
             case 5:
-                maxMagnitudeVisible = 6.1f; break;
+                maxMagnitudeVisible = 6.2f; break;
             case 6:
-                maxMagnitudeVisible = 5.1f; break;
+                maxMagnitudeVisible = 6.0f; break;
             case 7:
-                maxMagnitudeVisible = 4.6f; break;
+                maxMagnitudeVisible = 5.0f; break;
             case 8:
-                maxMagnitudeVisible = 4.1f; break;
+                maxMagnitudeVisible = 4.5f; break;
             case 9:
                 maxMagnitudeVisible = 4.0f; break;
         }
