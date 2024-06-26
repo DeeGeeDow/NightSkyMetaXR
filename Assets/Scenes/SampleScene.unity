@@ -1537,7 +1537,19 @@ MonoBehaviour:
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1581094562}
+        m_TargetAssemblyTypeName: StarField, Assembly-CSharp
+        m_MethodName: onBortleScaleDropdownChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &151113193
 MonoBehaviour:
@@ -9136,7 +9148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   starSizeMax: 10
-  maxMagnitudeVisible: 7.6
+  maxMagnitudeVisible: 8
   starMaterial: {fileID: 2100000, guid: 31d03ed577cc94943a0b18dc96c2b4e6, type: 2}
   LocationManager: {fileID: 1400498532}
   TimeManager: {fileID: 408634478}

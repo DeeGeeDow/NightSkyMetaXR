@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Oculus.Interaction.DebugTree;
+using UnityEngine.UI;
 
 public class StarField : MonoBehaviour
 {
@@ -187,5 +188,36 @@ public class StarField : MonoBehaviour
                 _constellationLines[i][j].SetPosition(1, pos2 - dir);
             }
         }
+    }
+
+    public void BortleScaleChanged(int BortleScale)
+    {
+        switch(BortleScale)
+        {
+            case 1: 
+                maxMagnitudeVisible = 7.6f; break;
+            case 2:
+                maxMagnitudeVisible = 7.1f; break;
+            case 3:
+                maxMagnitudeVisible = 6.6f; break;
+            case 4:
+                maxMagnitudeVisible = 6.3f; break;
+            case 5:
+                maxMagnitudeVisible = 6.1f; break;
+            case 6:
+                maxMagnitudeVisible = 5.1f; break;
+            case 7:
+                maxMagnitudeVisible = 4.6f; break;
+            case 8:
+                maxMagnitudeVisible = 4.1f; break;
+            case 9:
+                maxMagnitudeVisible = 4.0f; break;
+        }
+    }
+
+    public void onBortleScaleDropdownChanged(int dropdownValue)
+    {
+        // Dropdown index started from 0
+        BortleScaleChanged(dropdownValue+1);
     }
 }
