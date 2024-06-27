@@ -6,11 +6,13 @@ public class SkyBoxController : MonoBehaviour
 {
     public LocationManager LocationManager;
     public TimeManager TimeManager;
+    public bool isTextureFlipped = false;
 
+    // Get Milkyway texture https://svs.gsfc.nasa.gov/4851/
     private void Start()
     {
         //RotateSkyBased((float)TimeManager.Lst, LocationManager.latitude);
-        
+
     }
     public void Update()
     {
@@ -19,8 +21,9 @@ public class SkyBoxController : MonoBehaviour
 
     void RotateSkyBased(float lst, float lat)
     {
-        transform.Rotate(0, 0, lst);
-        transform.Rotate(-(90+lat), 0, 0);
+        if (!isTextureFlipped) transform.Rotate(0, 0, 180);
+        transform.Rotate(0, -lst, 0, Space.World);
+        transform.Rotate(-(90 + lat), 0, 0, Space.World);
     }
 
     void RotateEveryTime(float lst, float lat)
