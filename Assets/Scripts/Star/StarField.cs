@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class StarField : MonoBehaviour
 {
     [Range(0, 50)]
+    [SerializeField] private float starSizeMaxClearSky = 5f;
     [SerializeField] private float starSizeMax = 5f;
     public List<Star> stars;
     // private List<GameObject> starObjects;
@@ -32,6 +33,7 @@ public class StarField : MonoBehaviour
     private List<List<LineRenderer>> _constellationLines = new();
     private List<int> _constellationStars = new();
     public Material ConstellationLineMaterial;
+    public SkyBoxController SkyBoxController;
 
     private Camera _cam;
     private void Awake()
@@ -213,6 +215,8 @@ public class StarField : MonoBehaviour
             case 9:
                 maxMagnitudeVisible = 4.0f; break;
         }
+        SkyBoxController.SetIntensity(maxMagnitudeVisible);
+        starSizeMax = starSizeMaxClearSky*Mathf.Pow(1.05f, (maxMagnitudeVisible - 8)/2);
     }
 
     public void onBortleScaleDropdownChanged(int dropdownValue)

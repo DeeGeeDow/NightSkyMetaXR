@@ -7,8 +7,13 @@ public class SkyBoxController : MonoBehaviour
     public LocationManager LocationManager;
     public TimeManager TimeManager;
     public bool isTextureFlipped = false;
+    private Material material;
 
-    // Get Milkyway texture https://svs.gsfc.nasa.gov/4851/
+    // Get Milkyway texture https://svs.gsfc.nasa.gov/4851/, and then set material shader to Skybox/Cubemap
+    private void Awake()
+    {
+        material = GetComponent<Renderer>().material;
+    }
     private void Start()
     {
         //RotateSkyBased((float)TimeManager.Lst, LocationManager.latitude);
@@ -30,5 +35,11 @@ public class SkyBoxController : MonoBehaviour
     {
         transform.rotation = Quaternion.Euler(Vector3.zero);
         RotateSkyBased(lst, lat);
+    }
+
+    public void SetIntensity(float maxMagnitude)
+    {
+        float exposure = Mathf.Pow(2.5f, (maxMagnitude - 8)/2);
+        material.SetFloat("_Exposure", exposure);
     }
 }

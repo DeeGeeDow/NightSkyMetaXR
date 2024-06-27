@@ -9277,12 +9277,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3f5c3fe3639f9c4cbd312da2cea4122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  starSizeMaxClearSky: 5
   starSizeMax: 10
   maxMagnitudeVisible: 8
   starMaterial: {fileID: 2100000, guid: 31d03ed577cc94943a0b18dc96c2b4e6, type: 2}
   LocationManager: {fileID: 1400498532}
   TimeManager: {fileID: 408634478}
   ConstellationLineMaterial: {fileID: 0}
+  SkyBoxController: {fileID: 366035286}
 --- !u!4 &1581094563
 Transform:
   m_ObjectHideFlags: 0
