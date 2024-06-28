@@ -11,10 +11,12 @@ public static class StarLoader
     public static List<List<(int, int)>> constellationships;
     public static List<int> constellationStars;
     public static List<(float, float)> constellationPositions;
+    public static Dictionary<string, string> IAUtoProperName;
     public static void LoadData(int starFieldScale)
     {
         LoadStars();
         LoadConstellationStars();
+        LoadConstellationNames();
         LoadConstellations(starFieldScale);
         CalculateConstellationPosition();
     }
@@ -64,7 +66,7 @@ public static class StarLoader
         {
             string line = reader.ReadLine();
             string[] items = line.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
-            constellations.Add(items[0]);
+            constellations.Add(IAUtoProperName[items[0]]);
             int n = int.Parse(items[1]);
             List<(int, int)> constellationship = new();
 
@@ -76,6 +78,32 @@ public static class StarLoader
                 constellationship.Add((a, b));
             }
             constellationships.Add(constellationship);
+        }
+    }
+
+    public static void LoadConstellationNames()
+    {
+        IAUtoProperName = new();
+        //const string constellationNameFile = "constellationname";
+        //TextAsset constellationNameAsset = Resources.Load(constellationNameFile) as TextAsset;
+        //StringReader constellationReader = new StringReader(constellationNameAsset.text);
+
+        //while (constellationReader.Peek() != -1)
+        //{
+        //    string line = constellationReader.ReadLine();
+        //    string[] items = line.Split(',', StringSplitOptions.RemoveEmptyEntries);
+        //    if (items[0] == "Constellation") continue;
+        //    string name = items[0].Split('/', StringSplitOptions.RemoveEmptyEntries)[0];
+        //    IAUtoProperName.Add(items[1], name);
+        //}
+
+        List<Dictionary<string, object>> data = CSVReader.Read("constellationname");
+
+        for (var i = 0; i < data.Count; i++)
+        {
+            string name = data[i]["Constellation"] as string;
+            name = name.Split('/', StringSplitOptions.RemoveEmptyEntries)[0];
+            IAUtoProperName.Add(data[i]["IAU"] as string, name);
         }
     }
 
@@ -96,7 +124,7 @@ public static class StarLoader
         for(int i=0; i<constellationStars.Count; i++) 
         {
             Star star = stars[constellationStars[i] - 1];
-            int consId = constellations.IndexOf(star.con);
+            int consId = constellations.IndexOf(IAUtoProperName[star.con]);
             if (consId != -1)
             {
                 sinRA[consId] += Mathf.Sin((float)star.ra * 15 * Mathf.Deg2Rad);

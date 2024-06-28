@@ -107,6 +107,8 @@ public class ConstellationField : MonoBehaviour
             constellationNameGO.transform.Rotate(Vector3.up, 180);
             constellationNameText.text = constellations[i];
             constellationNameText.fontSize = 72;
+            constellationNameText.enableWordWrapping = false;
+            constellationNameText.overflowMode = TextOverflowModes.Overflow;
             _constellationNameObjects.Add(constellationNameGO);
             
         }
