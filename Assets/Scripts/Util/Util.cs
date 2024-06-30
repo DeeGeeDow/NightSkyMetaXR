@@ -85,5 +85,69 @@ public static class Util
         return mesh;
     }
 
+    public struct CullFlags
+    {
+        public const byte CULLED = 0;
+        public const byte VISIBLE = 1;
+        public const byte PARTIALLY_VISIBLE = 2;
+    }
+
+    public static bool IsBehindPlane(ref Plane plane, ref Vector3 p0, ref Vector3 p1, ref Vector3 p2, ref Vector3 p3, ref Vector3 p4, ref Vector3 p5, ref Vector3 p6, ref Vector3 p7)
+    {
+        bool getside0 = plane.GetSide(p0);
+        bool getside1 = plane.GetSide(p1);
+        bool getside2 = plane.GetSide(p2);
+        bool getside3 = plane.GetSide(p3);
+        bool getside4 = plane.GetSide(p4);
+        bool getside5 = plane.GetSide(p5);
+        bool getside6 = plane.GetSide(p6);
+        bool getside7 = plane.GetSide(p7);
+        return !(getside0 || getside1 || getside2 || getside3 || getside4 || getside5 || getside6 || getside7);
+    }
+
+    public static bool IsPointInsideFrustum(ref Plane plane0, ref Plane plane1, ref Plane plane2, ref Plane plane3, ref Plane plane4, ref Plane plane5, ref Vector3 point)
+    {
+        bool getside0 = plane0.GetSide(point);
+        bool getside1 = plane1.GetSide(point);
+        bool getside2 = plane2.GetSide(point);
+        bool getside3 = plane3.GetSide(point);
+        bool getside4 = plane4.GetSide(point);
+        bool getside5 = plane5.GetSide(point);
+        return (getside0 && getside1 && getside2 && getside3 && getside4 && getside5);
+    }
+
+    public static byte FrustumCullingStatus(ref Plane plane0, ref Plane plane1, ref Plane plane2, ref Plane plane3, ref Plane plane4, ref Plane plane5, ref Bounds bounds)
+    {
+        Vector3 p0 = bounds.min;
+        Vector3 p1 = bounds.min + Vector3.right * bounds.size.x;
+        Vector3 p2 = bounds.min + Vector3.forward * bounds.size.z;
+        Vector3 p3 = bounds.min + Vector3.right*bounds.size.x + Vector3.forward*bounds.size.z;
+        Vector3 p4 = p0 + Vector3.up * bounds.size.y;
+        Vector3 p5 = p1 + Vector3.up * bounds.size.y;
+        Vector3 p6 = p2 + Vector3.up * bounds.size.y;
+        Vector3 p7 = p3 + Vector3.up * bounds.size.y;
+
+        bool cull1 = IsBehindPlane(ref plane0, ref p0, ref p1, ref p2, ref p3, ref p4, ref p5, ref p6, ref p7);
+        bool cull2 = IsBehindPlane(ref plane1, ref p0, ref p1, ref p2, ref p3, ref p4, ref p5, ref p6, ref p7);
+        bool cull3 = IsBehindPlane(ref plane2, ref p0, ref p1, ref p2, ref p3, ref p4, ref p5, ref p6, ref p7);
+        bool cull4 = IsBehindPlane(ref plane3, ref p0, ref p1, ref p2, ref p3, ref p4, ref p5, ref p6, ref p7);
+        bool cull5 = IsBehindPlane(ref plane4, ref p0, ref p1, ref p2, ref p3, ref p4, ref p5, ref p6, ref p7);
+        bool cull6 = IsBehindPlane(ref plane5, ref p0, ref p1, ref p2, ref p3, ref p4, ref p5, ref p6, ref p7);
+
+        if (cull1 || cull2 || cull3 || cull4 || cull5 || cull6) return CullFlags.CULLED;
+
+        bool partcull0 = IsPointInsideFrustum(ref plane0, ref plane1, ref plane2, ref plane3, ref plane4, ref plane5, ref p0);
+        bool partcull1 = IsPointInsideFrustum(ref plane0, ref plane1, ref plane2, ref plane3, ref plane4, ref plane5, ref p1);
+        bool partcull2 = IsPointInsideFrustum(ref plane0, ref plane1, ref plane2, ref plane3, ref plane4, ref plane5, ref p2);
+        bool partcull3 = IsPointInsideFrustum(ref plane0, ref plane1, ref plane2, ref plane3, ref plane4, ref plane5, ref p3);
+        bool partcull4 = IsPointInsideFrustum(ref plane0, ref plane1, ref plane2, ref plane3, ref plane4, ref plane5, ref p4);
+        bool partcull5 = IsPointInsideFrustum(ref plane0, ref plane1, ref plane2, ref plane3, ref plane4, ref plane5, ref p5);
+        bool partcull6 = IsPointInsideFrustum(ref plane0, ref plane1, ref plane2, ref plane3, ref plane4, ref plane5, ref p6);
+        bool partcull7 = IsPointInsideFrustum(ref plane0, ref plane1, ref plane2, ref plane3, ref plane4, ref plane5, ref p7);
+
+        if (!partcull0 || !partcull1 || !partcull2 || !partcull3 || !partcull4 || !partcull5 || !partcull6 || !partcull7) return CullFlags.PARTIALLY_VISIBLE;
+
+        return CullFlags.VISIBLE;
+    }
 
 }
