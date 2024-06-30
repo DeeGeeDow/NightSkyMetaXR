@@ -43,7 +43,7 @@ public class TimeManager : MonoBehaviour
     {
         DateTimeZone = DateTimeZone.Utc;
         ConvertTimeByLocation(-6.914744f, 107.609810f);
-        //AppTime = SystemClock.Instance.GetCurrentInstant();
+        AppTimeInstant = SystemClock.Instance.GetCurrentInstant();
         Lst = SetLst(LocationManager.longitude);
     }
 

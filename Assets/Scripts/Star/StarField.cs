@@ -9,8 +9,8 @@ using UnityEngine.UI;
 public class StarField : MonoBehaviour
 {
     [Range(0, 50)]
-    [SerializeField] private float starSizeMaxClearSky = 5f;
-    [SerializeField] private float starSizeMax = 5f;
+    [SerializeField] private float starSizeMaxClearSky = 10f;
+    [SerializeField] private float starSizeMax = 10f;
     public List<Star> stars;
     // private List<GameObject> starObjects;
     private List<Vector3> starPositions;
@@ -216,7 +216,7 @@ public class StarField : MonoBehaviour
                 maxMagnitudeVisible = 4.0f; break;
         }
         SkyBoxController.SetIntensity(maxMagnitudeVisible);
-        starSizeMax = starSizeMaxClearSky*Mathf.Pow(1.05f, (maxMagnitudeVisible - 8)/2);
+        starSizeMax = starSizeMaxClearSky*Mathf.Pow(1.25f, (maxMagnitudeVisible - 8)/2);
     }
 
     public void onBortleScaleDropdownChanged(int dropdownValue)
