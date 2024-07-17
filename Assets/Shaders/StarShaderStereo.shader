@@ -10,7 +10,7 @@ Shader "Unlit/StarShaderStereo"
     {
         Blend SrcAlpha One
         ZTest Off
-        Tags { "Queue" = "Background" }
+        Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
         LOD 100
 
         Pass
@@ -80,7 +80,7 @@ Shader "Unlit/StarShaderStereo"
 
             fixed4 frag(v2f i) : SV_Target
             {
-                UNITY_SETUP_INSTANCE_ID(i);
+                // UNITY_SETUP_INSTANCE_ID(i);
 
                 float distance_from_center = length((2 * i.uv) - 1);
                 float inverse_dist = saturate((0.2 / distance_from_center) - 0.2);

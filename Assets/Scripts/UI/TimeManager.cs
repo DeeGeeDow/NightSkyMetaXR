@@ -6,6 +6,7 @@ using GeoTimeZone;
 using NodaTime;
 using TimeZoneConverter;
 using TMPro;
+using UnityEngine.Events;
 
 public class TimeManager : MonoBehaviour
 {
@@ -39,6 +40,9 @@ public class TimeManager : MonoBehaviour
     public TMP_InputField MinuteUI;
     public TMP_InputField SecondUI;
 
+    // to test only
+    public UnityEvent changeTimeEvent;
+
     public void Awake()
     {
         DateTimeZone = DateTimeZone.Utc;
@@ -49,7 +53,17 @@ public class TimeManager : MonoBehaviour
 
     public void Update()
     {
-        AppTimeInstant = AppTimeInstant.Plus(Duration.FromSeconds((double) Time.deltaTime));
+        bool yearUISelected = YearUI.isFocused;
+        bool monthUISelected = MonthUI.isFocused;
+        bool dayUISelected = DayUI.isFocused;
+        bool hourUISelected = HourUI.isFocused;
+        bool minuteUISelected = MinuteUI.isFocused;
+        bool secondUISelected = SecondUI.isFocused;
+        if (yearUISelected || monthUISelected || dayUISelected || hourUISelected || minuteUISelected || secondUISelected) { }
+        else
+        {
+            AppTimeInstant = AppTimeInstant.Plus(Duration.FromSeconds((double)Time.deltaTime));
+        }
         Lst = SetLst(LocationManager.longitude);
     }
 
@@ -83,7 +97,7 @@ public class TimeManager : MonoBehaviour
         int year = int.Parse(yearString);
         LocalDateTime localDateTime = AppTime.LocalDateTime;
         int diff = year - AppTime.Year;
-        localDateTime.PlusYears(diff);
+        localDateTime = localDateTime.PlusYears(diff);
 
         AppTime = new ZonedDateTime(localDateTime, DateTimeZone, AppTime.Offset);
         AppTimeInstant = AppTime.ToInstant();
@@ -94,7 +108,7 @@ public class TimeManager : MonoBehaviour
         int month = int.Parse(monthString);
         LocalDateTime localDateTime = AppTime.LocalDateTime;
         int diff = month - AppTime.Month;
-        localDateTime.PlusMonths(diff);
+        localDateTime = localDateTime.PlusMonths(diff);
 
         AppTime = new ZonedDateTime(localDateTime, DateTimeZone, AppTime.Offset);
         AppTimeInstant = AppTime.ToInstant();
@@ -105,7 +119,7 @@ public class TimeManager : MonoBehaviour
         int day = int.Parse(dayString);
         LocalDateTime localDateTime = AppTime.LocalDateTime;
         int diff = day - AppTime.Day;
-        localDateTime.PlusDays(diff);
+        localDateTime = localDateTime.PlusDays(diff);
         
         AppTime = new ZonedDateTime(localDateTime, DateTimeZone, AppTime.Offset);
         AppTimeInstant = AppTime.ToInstant();
@@ -115,15 +129,19 @@ public class TimeManager : MonoBehaviour
     {
         int hour = int.Parse(hourString);
         int diff = hour - AppTime.Hour;
-        AppTime.PlusHours(diff);
+        AppTime = AppTime.PlusHours(diff);
         AppTimeInstant = AppTime.ToInstant();
+        // TO DELETE
+        Debug.Log($"Hour is changed to {AppTime.Hour}");
+        changeTimeEvent.Invoke();
+
     }
 
     public void SetMinute(string minuteString)
     {
         int minute = int.Parse(minuteString);
         int diff = minute - AppTime.Minute;
-        AppTime.PlusMinutes(diff);
+        AppTime = AppTime.PlusMinutes(diff);
         AppTimeInstant = AppTime.ToInstant();
     }
 
@@ -131,7 +149,7 @@ public class TimeManager : MonoBehaviour
     {
         int second = int.Parse(secondString);
         int diff = second- AppTime.Second;
-        AppTime.PlusSeconds(diff);
+        AppTime = AppTime.PlusSeconds(diff);
         AppTimeInstant = AppTime.ToInstant();
     }
 

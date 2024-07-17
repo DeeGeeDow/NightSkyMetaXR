@@ -49,6 +49,19 @@ public class StarField : MonoBehaviour
     private byte[] cullResults;
 
     private JobHandle cullingJobHandle;
+    private float timeChangeRenderSettings = 0;
+    private bool _firstRenderExecuted = false;
+    public bool FirstRenderExecuted
+    {
+        get => _firstRenderExecuted;
+        set
+        {
+            _firstRenderExecuted = value;
+            if(!value) timeChangeRenderSettings = Time.realtimeSinceStartup;
+        
+        }
+    }
+
 
     private void Awake()
     {
@@ -70,7 +83,7 @@ public class StarField : MonoBehaviour
             if (stars[i].mag < maxMagnitudeVisible)
             {
                 stars[i].CalculatePosition((float)TimeManager.Lst, LocationManager.latitude);
-                positionNA[i] = stars[i].FieldPosition;
+                positionNA[i] = stars[i].FieldPosition * starFieldScale;
                 scaleNA[i] = Vector3.one * stars[i].size * starSizeMax;
             }
         }
@@ -92,14 +105,11 @@ public class StarField : MonoBehaviour
         _constellationStars = StarLoader.constellationStars;
 
         mesh = Util.CreateQuad();
-        //RenderStar();
-
-        //CreateConstellation();
-        Debug.Log(Time.realtimeSinceStartup);
     }
 
     private void Update()
     {
+        CalculateAllStarPositions();
         if (cullingJobHandle.IsCompleted)
         {
             cullingJobHandle.Complete();
@@ -122,79 +132,42 @@ public class StarField : MonoBehaviour
             };
             
             cullingJobHandle = starRenderingJob.Schedule(stars.Count, 100);
-            RenderStarJob();
+            RenderStar();
+            // TO DELETE: ONLY FOR TESTING THE TIME
+            if (!FirstRenderExecuted)
+            {
+                FirstRenderExecuted = true;
+                Debug.Log($"First Render Finished : {Time.realtimeSinceStartup - timeChangeRenderSettings}");
+            }
         }
-        //DrawConstellation();
     }
 
-    //private void RenderStar()
-    //{
-    //    int n = stars.Count;
-    //    matrices = new();
-    //    colors = new();
-    //    sizes = new();
-    //    blocks = new();
-    //    batch = 0;
+    private void CalculateAllStarPositions()
+    {
+        int constellationStarId = 0;
+        for(int i=0; i<stars.Count; i++)
+        {
+            bool positionCalculated = false;
+            if (stars[i].mag < maxMagnitudeVisible)
+            {
+                stars[i].CalculatePosition((float)TimeManager.Lst, LocationManager.latitude);
+                positions[i] = stars[i].FieldPosition * starFieldScale;
+                positionCalculated = true;
+            }
 
-    //    matrices.Add(new List<Matrix4x4>());
-    //    colors.Add(new List<Vector4>());
-    //    sizes.Add(new List<float>());
-    //    blocks.Add(new MaterialPropertyBlock());
-    //    int constellationStarId = 0;
-    //    for (int i = 0; i < n; i++)
-    //    {
-    //        //stars[i].CalculatePosition((float)TimeManager.Lst, LocationManager.latitude);
-    //        Matrix4x4 mat = Matrix4x4.identity;
-    //        if (stars[i].mag < maxMagnitudeVisible)
-    //        {
-    //            stars[i].CalculatePosition((float)TimeManager.Lst, LocationManager.latitude);
-    //            Vector3 position = stars[i].FieldPosition * starFieldScale;
-    //            Quaternion rotation = Quaternion.LookRotation(position, Vector3.up);
-    //            Vector3 scale = Vector3.one * stars[i].size * starSizeMax;
-
-    //            _bounds.center = position;
-    //            _bounds.size = scale;
-    //            byte cullFlag = Util.FrustumCullingStatus(ref frustumPlanes[0], ref frustumPlanes[1], ref frustumPlanes[2], ref frustumPlanes[3], ref frustumPlanes[4], ref frustumPlanes[5], ref _bounds);
-    //            if(cullFlag != Util.CullFlags.CULLED)
-    //            {
-    //                mat.SetTRS(position, rotation, scale);
-    //                matrices[batch].Add(mat);
-    //                colors[batch].Add(stars[i].color);
-    //                sizes[batch].Add(stars[i].size * starSizeMax);
-    //                if (matrices[batch].Count >= 1000)
-    //                {
-    //                    blocks[batch].SetFloatArray("_Size", sizes[batch]);
-    //                    blocks[batch].SetVectorArray("_Color", colors[batch]);
-    //                    batch++;
-    //                    matrices.Add(new List<Matrix4x4>());
-    //                    colors.Add(new List<Vector4>());
-    //                    sizes.Add(new List<float>());
-    //                    blocks.Add(new MaterialPropertyBlock());
-    //                }
-
-    //            }
-
-    //            if (constellationStarId < _constellationStars.Count && _constellationStars[constellationStarId] == stars[i].id)
-    //            {
-    //                constellationStarId++;
-    //            }
-    //        }
-    //        else if (constellationStarId < _constellationStars.Count && _constellationStars[constellationStarId] == stars[i].id)
-    //        {
-    //            stars[i].CalculatePosition((float)TimeManager.Lst, LocationManager.latitude);
-    //            constellationStarId++;
-    //        }
-    //    }
-    //    //blocks[batch].SetFloatArray("_Size", sizes[batch]);
-    //    blocks[batch].SetVectorArray("_Color", colors[batch]);
-
-    //    for (int i = 0; i <= batch; i++)
-    //    {
-    //        Graphics.DrawMeshInstanced(mesh, 0, starMaterial, matrices[i].ToArray(), matrices[i].Count, blocks[i]);
-    //    }
-    //}
-
-    private void RenderStarJob()
+            if (constellationStarId < _constellationStars.Count && _constellationStars[constellationStarId] == stars[i].id)
+            {
+                if(positionCalculated) 
+                {
+                    stars[i].CalculatePosition((float)TimeManager.Lst, LocationManager.latitude);
+                    positions[i] = stars[i].FieldPosition * starFieldScale;
+                    positionCalculated = true;
+                }
+                constellationStarId++;
+            }
+        }
+    }
+    private void RenderStar()
     {
         int n = stars.Count;
         matrices = new();
@@ -207,19 +180,17 @@ public class StarField : MonoBehaviour
         colors.Add(new List<Vector4>());
         sizes.Add(new List<float>());
         blocks.Add(new MaterialPropertyBlock());
-        int constellationStarId = 0;
+        //int constellationStarId = 0;
         for (int i = 0; i < n; i++)
         {
             //stars[i].CalculatePosition((float)TimeManager.Lst, LocationManager.latitude);
             Matrix4x4 mat = Matrix4x4.identity;
             if (cullResults[i] != Util.CullFlags.CULLED)
             {
-                stars[i].CalculatePosition((float)TimeManager.Lst, LocationManager.latitude);
-                Vector3 position = stars[i].FieldPosition * starFieldScale;
+                Vector3 position = positions[i];
                 Quaternion rotation = Quaternion.LookRotation(position, Vector3.up);
                 Vector3 scale = Vector3.one * stars[i].size * starSizeMax;
 
-                positions[i] = position;
                 mat.SetTRS(position, rotation, scale);
                 matrices[batch].Add(mat);
                 colors[batch].Add(stars[i].color);
@@ -235,16 +206,17 @@ public class StarField : MonoBehaviour
                     blocks.Add(new MaterialPropertyBlock());
                 }
 
-                if (constellationStarId < _constellationStars.Count && _constellationStars[constellationStarId] == stars[i].id)
-                {
-                    constellationStarId++;
-                }
+                //if (constellationStarId < _constellationStars.Count && _constellationStars[constellationStarId] == stars[i].id)
+                //{
+                //    constellationStarId++;
+                //}
             }
-            else if (constellationStarId < _constellationStars.Count && _constellationStars[constellationStarId] == stars[i].id)
-            {
-                stars[i].CalculatePosition((float)TimeManager.Lst, LocationManager.latitude);
-                constellationStarId++;
-            }
+            //else if (constellationStarId < _constellationStars.Count && _constellationStars[constellationStarId] == stars[i].id)
+            //{
+            //    stars[i].CalculatePosition((float)TimeManager.Lst, LocationManager.latitude);
+            //    positions[i] = stars[i].FieldPosition;
+            //    constellationStarId++;
+            //}
         }
         //blocks[batch].SetFloatArray("_Size", sizes[batch]);
         blocks[batch].SetVectorArray("_Color", colors[batch]);
