@@ -10,6 +10,8 @@ public class QueryController : MonoBehaviour
     public StarField starField;
     public List<int> starIndexList;
     public Transform tableTransform;
+    public bool isStarSelected = false;
+    public PointerController PointerController;
     public void FindStar(string name)
     {
         starIndexList = new List<int>();
@@ -36,6 +38,8 @@ public class QueryController : MonoBehaviour
             GameObject starInfo = Instantiate(resultGO);
             starInfo.transform.parent = tableTransform;
             starInfo.transform.localRotation = Quaternion.identity;
+            starInfo.transform.GetComponent<StarInfoController>().Star = starField.stars[starIndexList[i]];
+            starInfo.transform.GetComponent<StarInfoController>().PointerController = PointerController;
             starInfo.transform.Find("Content").Find("Star Name").GetComponent<TMP_Text>().text = starField.stars[starIndexList[i]].proper;
             starInfo.transform.Find("Content").Find("Constellation Name").GetComponent<TMP_Text>().text = StarLoader.IAUtoProperName[starField.stars[starIndexList[i]].con];
         }

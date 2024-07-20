@@ -4,6 +4,33 @@ using UnityEngine;
 
 public static class Util
 {
+    public static Dictionary<string, string> FullGreek = new Dictionary<string, string>()
+    {
+        { "Alp", "Alpha" },
+        { "Bet", "Beta" },
+        { "Gam", "Gamma" },
+        { "Del", "Delta" },
+        { "Eps", "Epsilon" },
+        { "Zet", "Zeta" },
+        { "Eta", "Eta" },
+        { "The", "Theta" },
+        { "Iot", "Iota" },
+        { "Kap", "Kappa" },
+        { "Lam", "Lambda" },
+        { "Mu", "Mu" },
+        { "Nu", "Nu" },
+        { "Xi", "Xi" },
+        { "Omi", "Omicron" },
+        { "Pi", "Pi" },
+        { "Rho", "Rho" },
+        { "Sig", "Sigma" },
+        { "Tau", "Tau" },
+        { "Ups", "Upsilon" },
+        { "Phi", "Phi" },
+        { "Chi", "Chi" },
+        { "Psi", "Psi" },
+        { "Ome", "Omega" }
+    };
     public static Vector3 SphereToRec(float hor, float ver)
     {
         // ver : angle from z+ to y+
@@ -150,4 +177,14 @@ public static class Util
         return CullFlags.VISIBLE;
     }
 
+    public static string Deg2DegMinSec(float deg)
+    {
+        string result = "";
+        int hour = Mathf.FloorToInt(deg);
+        float secs = (deg - hour) * 3600;
+        int min = Mathf.FloorToInt(secs / 60);
+        secs -= min * 60;
+        result = $"{hour}° {min}' {System.Math.Round(secs, 2)}\"";
+        return result;
+    }
 }

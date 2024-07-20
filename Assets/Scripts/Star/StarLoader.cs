@@ -12,6 +12,7 @@ public static class StarLoader
     public static List<int> constellationStars;
     public static List<(float, float)> constellationPositions;
     public static Dictionary<string, string> IAUtoProperName;
+    public static Dictionary<string, string> IAUtoGenitive;
     public static void LoadData(int starFieldScale)
     {
         LoadStars();
@@ -84,6 +85,7 @@ public static class StarLoader
     public static void LoadConstellationNames()
     {
         IAUtoProperName = new();
+        IAUtoGenitive = new();
         //const string constellationNameFile = "constellationname";
         //TextAsset constellationNameAsset = Resources.Load(constellationNameFile) as TextAsset;
         //StringReader constellationReader = new StringReader(constellationNameAsset.text);
@@ -104,6 +106,10 @@ public static class StarLoader
             string name = data[i]["Constellation"] as string;
             name = name.Split('/', StringSplitOptions.RemoveEmptyEntries)[0];
             IAUtoProperName.Add(data[i]["IAU"] as string, name);
+
+            string gen = data[i]["Genitive"] as string;
+            gen = gen.Split('/', StringSplitOptions.RemoveEmptyEntries)[0];
+            IAUtoGenitive.Add(data[i]["IAU"] as string, gen);
         }
     }
 

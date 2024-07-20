@@ -36,7 +36,10 @@ public class Star
     public float size;
     public Color color;
 
+    public float alt;
+    public float az;
     public Vector3 FieldPosition; // poisition with radius 1
+
 
     //Constructor
     public Star(string[] items)
@@ -110,6 +113,8 @@ public class Star
         if (ha > 180) ha -= 360;
         else if (ha < -180) ha += 360;
         (float, float) altAz = Util.HaDecToAltAz(ha, (float)dec, lat);
+        alt = altAz.Item1;
+        az = altAz.Item2;
         FieldPosition = Util.SphereToRec(altAz.Item2, altAz.Item1);
     }
 }

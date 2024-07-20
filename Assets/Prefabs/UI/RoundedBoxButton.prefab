@@ -435,6 +435,7 @@ GameObject:
   - component: {fileID: 4702128717901335498}
   - component: {fileID: 1672029430681445183}
   - component: {fileID: 1672029430681445182}
+  - component: {fileID: 6289183344611158230}
   m_Layer: 0
   m_Name: RoundedBoxButton
   m_TagString: Untagged
@@ -567,7 +568,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5372320162293213921}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6289183344611158230}
+        m_TargetAssemblyTypeName: StarInfoController, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6289183344611158230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372320162344469519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc6f696ee7b7f0a44aab71123472949b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6712352363709302605
 GameObject:
   m_ObjectHideFlags: 0
