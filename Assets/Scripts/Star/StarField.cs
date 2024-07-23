@@ -16,7 +16,7 @@ public class StarField : MonoBehaviour
     public List<Star> stars;
     // private List<GameObject> starObjects;
     private List<Vector3> starPositions;
-    [SerializeField] private float maxMagnitudeVisible = 6f;
+    public float maxMagnitudeVisible = 6f;
     public readonly int starFieldScale = 400;
     public Material starMaterial;
     private List<MaterialPropertyBlock> blocks;
@@ -46,7 +46,7 @@ public class StarField : MonoBehaviour
     private NativeArray<float> magnitudesNA;
 
     private Vector3[] positions;
-    private byte[] cullResults;
+    public byte[] cullResults;
 
     private JobHandle cullingJobHandle;
     private float timeChangeRenderSettings = 0;

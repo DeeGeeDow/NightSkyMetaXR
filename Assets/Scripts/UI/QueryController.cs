@@ -12,14 +12,18 @@ public class QueryController : MonoBehaviour
     public Transform tableTransform;
     public bool isStarSelected = false;
     public PointerController PointerController;
+    public GameObject dialog;
     public void FindStar(string name)
     {
         starIndexList = new List<int>();
         for(int i=0; i<starField.stars.Count; i++)
         {
-            if (starField.stars[i].proper.Contains(name))
+            for(int j=0; j < starField.stars[i].names.Count; j++)
             {
-                starIndexList.Add(i);
+                if (starField.stars[i].names[j].ToLower().Contains(name.ToLower()))
+                {
+                    starIndexList.Add(i);
+                }
             }
         }
     }
@@ -40,7 +44,9 @@ public class QueryController : MonoBehaviour
             starInfo.transform.localRotation = Quaternion.identity;
             starInfo.transform.GetComponent<StarInfoController>().Star = starField.stars[starIndexList[i]];
             starInfo.transform.GetComponent<StarInfoController>().PointerController = PointerController;
-            starInfo.transform.Find("Content").Find("Star Name").GetComponent<TMP_Text>().text = starField.stars[starIndexList[i]].proper;
+            starInfo.transform.GetComponent<StarInfoController>().dialog = dialog;
+            starInfo.transform.GetComponent<StarInfoController>().starIndex = i;
+            starInfo.transform.Find("Content").Find("Star Name").GetComponent<TMP_Text>().text = starField.stars[starIndexList[i]].names[0];
             starInfo.transform.Find("Content").Find("Constellation Name").GetComponent<TMP_Text>().text = StarLoader.IAUtoProperName[starField.stars[starIndexList[i]].con];
         }
     }
@@ -52,7 +58,23 @@ public class QueryController : MonoBehaviour
 
     public void QueryStar()
     {
-        FindStar(starInputField.text);
+        if(starInputField.text.Length >= 3)
+        {
+            FindStar(starInputField.text);
+            UpdateList();
+        }
+        else
+        {
+            starIndexList.Clear();
+            UpdateList();
+        }
+    }
+
+    public void CloseDialog()
+    {
+        starIndexList.Clear();
         UpdateList();
+        dialog.SetActive(false);
+        PointerController.IsShowing = false;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 public static class StarLoader
 {
@@ -20,6 +21,7 @@ public static class StarLoader
         LoadConstellationNames();
         LoadConstellations(starFieldScale);
         CalculateConstellationPosition();
+        SetupNames();
     }
     public static void LoadStars()
     {
@@ -150,4 +152,40 @@ public static class StarLoader
         }
     }
 
+    public static void SetupNames()
+    {
+        for(int i=0; i<stars.Count; i++)
+        {
+            if (stars[i].proper is not null && stars[i].proper.Length > 0)
+            {
+                stars[i].names.Add(stars[i].proper);
+            }
+            if (stars[i].bayer is not null && stars[i].bayer.Length > 0)
+            {
+                string[] baySplit = stars[i].bayer.Split('-');
+                string fullBayerPrefix = Util.FullGreek[baySplit[0]] + ((baySplit.Length == 1) ? "" : $"-{baySplit[1]}");
+                stars[i].names.Add($"{fullBayerPrefix} {StarLoader.IAUtoGenitive[stars[i].con]}");
+            }
+            if (stars[i].flam is not null && stars[i].flam.Length > 0)
+            {
+                stars[i].names.Add($"{stars[i].flam} {StarLoader.IAUtoGenitive[stars[i].con]}");
+            }
+            if (stars[i].hip is not null && stars[i].hip.Length > 0)
+            {
+                stars[i].names.Add($"HIP {stars[i].hip}");
+            }
+            if (stars[i].hd is not null && stars[i].hd.Length > 0)
+            {
+                stars[i].names.Add($"HD {stars[i].hd}");
+            }
+            if (stars[i].hr is not null && stars[i].hr.Length > 0)
+            {
+                stars[i].names.Add($"HR {stars[i].hr}");
+            }
+            if (stars[i].gl is not null && stars[i].gl.Length > 0)
+            {
+                stars[i].names.Add(stars[i].gl);
+            }
+        }
+    }
 }

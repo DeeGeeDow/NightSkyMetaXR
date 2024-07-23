@@ -40,6 +40,8 @@ public class Star
     public float az;
     public Vector3 FieldPosition; // poisition with radius 1
 
+    public List<string> names = new();
+
 
     //Constructor
     public Star(string[] items)

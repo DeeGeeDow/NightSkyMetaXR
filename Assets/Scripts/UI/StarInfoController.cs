@@ -7,54 +7,15 @@ using UnityEngine;
 public class StarInfoController : MonoBehaviour
 {
     private Star _star;
-    public PointerController PointerController;
-    public Star Star
-    {
-        get => _star;
-        set
-        {
-            _star = value;
-            names = new List<string>();
-            if (value.proper is not null && value.proper.Length>0)
-            {
-                names.Add(value.proper);
-            }
-            if(value.bayer is not null && value.bayer.Length > 0)
-            {
-                string[] baySplit = value.bayer.Split('/');
-                Debug.Log($"value.bayer : {value.bayer.Length}");
-                string fullBayerPrefix = Util.FullGreek[baySplit[0]] + ((baySplit.Length == 1) ? "" : $"-{baySplit[1]}");
-                names.Add($"{fullBayerPrefix} {StarLoader.IAUtoGenitive[value.con]}");
-            }
-            if(value.flam is not null && value.flam.Length > 0)
-            {
-                names.Add($"{value.flam} {StarLoader.IAUtoGenitive[value.con]}");
-            }
-            if(value.hip is not null && value.hip.Length > 0)
-            {
-                names.Add($"HIP {value.hip}");
-            }            
-            if(value.hd is not null && value.hd.Length > 0)
-            {
-                names.Add($"HD {value.hd}");
-            }
-            if(value.hr is not null && value.hr.Length > 0)
-            {
-                names.Add($"HR {value.hr}");
-            }
-            if(value.gl is not null && value.gl.Length > 0)
-            {
-                names.Add(value.gl);
-            }
-        }
-    }
-    private List<string> names;
+    [HideInInspector] public int starIndex;
+    [HideInInspector] public PointerController PointerController;
+    [HideInInspector] public GameObject dialog;
+    public Star Star;
 
 
 
     public void OnClick()
     {
-        GameObject dialog = GameObject.Find("Dialog");
         dialog.SetActive(true);
         Transform content = dialog.transform.Find("Content");
         Transform title = content.Find("Title");
@@ -69,13 +30,13 @@ public class StarInfoController : MonoBehaviour
         Transform alt = mainInfo.Find("Alt");
         Transform az = mainInfo.Find("Az");
 
-        starname.GetComponent<TMP_Text>().text = names[0];
+        starname.GetComponent<TMP_Text>().text = Star.names[0];
         consname.GetComponent<TMP_Text>().text = StarLoader.IAUtoProperName[Star.con];
         string aliasesText = "";
-        for(int i=1; i<names.Count; i++)
+        for(int i=1; i<Star.names.Count; i++)
         {
-            aliasesText += names[i];
-            if(i != names.Count-1)
+            aliasesText += Star.names[i];
+            if(i != Star.names.Count-1)
             {
                 aliasesText += ", ";
             }
@@ -90,5 +51,6 @@ public class StarInfoController : MonoBehaviour
 
         PointerController.star = Star;
         PointerController.IsShowing = true;
+        PointerController.starIndex = starIndex;
     }
 }
